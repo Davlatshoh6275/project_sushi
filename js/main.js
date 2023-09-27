@@ -84,10 +84,10 @@ window.addEventListener('click', function (event) {
 
         console.log(productInfo);
 
-        const cardItemHTML = `<div class="cart-item" data-id="02">
+        const cardItemHTML = `<div class="cart-item" data-id="${productInfo.id}">
         <div class="cart-item__top">
           <div class="cart-item__img">
-            <img src="img/roll/california-tempura.jpg" alt="" />
+            <img src="${productInfo.imgSrc}" alt="img" />
           </div>
           <div class="cart-item__desc">
             <div class="cart-item__title">${productInfo.title}</div>
