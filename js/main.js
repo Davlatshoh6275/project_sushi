@@ -1,58 +1,63 @@
+// skrit blok karzina pusta
+
+function toggleComplite() {
+
+    const cartWrapper = document.querySelector('.cart-wrapper')
+    const dataCart = document.querySelector('[data-cart-empty]')
+
+    const orderForm = document.querySelector('#order-form')
+
+
+    // console.log(
+    //     cartWrapper.children.length
+    // );
+
+    if (cartWrapper.children.length > 0) {
+        console.log('full');
+        dataCart.classList.add('none')
+        orderForm.classList.remove('none')
+
+    } else {
+        console.log('empty');
+        dataCart.classList.remove('none')
+        orderForm.classList.add('none')
+    }
+
+
+    // you must call function toggleComplite() in two funchtions minus btn and add to carzine
+
+}
+
+
+// // skrit blok karzina pusta
+
 // counter 
-
-// // counter baroyi yaktesh / start
-
-// const btnMinus = document.querySelector('[data-action="minus"]')
-// const btnPlus = document.querySelector('[data-action="plus"]')
-// const counter = document.querySelector('[data-counter]')
-
-// btnMinus.addEventListener("click", function () {
-
-//     if (parseInt(counter.innerText) > 1) {
-//         counter.innerText = --counter.innerText
-//     }
-
-// })
-// btnPlus.addEventListener("click", function () {
-//     counter.innerText = ++counter.innerText
-// })
-
-// counter baroyi yaktesh / end
-
-
-
-
-// // counter baroyi hammesh / start
-
 window.addEventListener('click', function (event) {
-    // console.log('Click window!');
-    // console.log(event.target.dataset.action);
 
     if (event.target.dataset.action === "plus") {
-        // console.log('plus');
 
         // yaqin bulgan ota elementni topib beradi // method closest()
         const counterWrapper = event.target.closest('.counter-wrapper')
 
-        // console.log(counterWrapper);
 
         const counter = counterWrapper.querySelector('[data-counter]')
-        // console.log(counter);
         counter.innerText = ++counter.innerText
     }
 
     if (event.target.dataset.action === "minus") {
-        // console.log('minus');
 
         // yaqin bulgan ota elementni topib beradi // method closest()
         const counterWrapper = event.target.closest('.counter-wrapper')
 
-        // console.log(counterWrapper);
-
         const counter = counterWrapper.querySelector('[data-counter]')
-        // console.log(counter);
         if (parseInt(counter.innerText) > 1) {
             counter.innerText = --counter.innerText
+        }
+        // baroyi udalit kadan 
+        else if (event.target.closest('.cart-wrapper') && parseInt(counter.innerText) === 1) {
+
+            event.target.closest('.cart-item').remove()
+            toggleComplite()
         }
     }
 })
@@ -67,10 +72,8 @@ window.addEventListener('click', function (event) {
 
     // 
     if (event.target.hasAttribute('data-cart')) {
-        // console.log('Click in cart btn');
 
         const card = event.target.closest('.card')
-        // console.log(card);
 
         const productInfo = {
             id: card.dataset.id,
@@ -82,25 +85,33 @@ window.addEventListener('click', function (event) {
             counter: card.querySelector('[data-counter]').innerText,
         }
 
-        console.log(productInfo);
 
-        const cardItemHTML = `<div class="cart-item" data-id="${productInfo.id}">
-        <div class="cart-item__top">
-          <div class="cart-item__img">
+        // proverka tovara estli v karzine
+
+        const itemInCart = cartWrapper.querySelector(`[data-id="${productInfo.id}"]`)
+
+        if (itemInCart) {
+            const counterElem = itemInCart.querySelector("[data-counter]")
+            counterElem.innerText = parseInt(counterElem.innerText) + parseInt(productInfo.counter)
+        } else {
+
+            const cardItemHTML = `<div class="cart-item" data-id="${productInfo.id}">
+            <div class="cart-item__top">
+            <div class="cart-item__img">
             <img src="${productInfo.imgSrc}" alt="img" />
-          </div>
-          <div class="cart-item__desc">
+            </div>
+            <div class="cart-item__desc">
             <div class="cart-item__title">${productInfo.title}</div>
             <div class="cart-item__weight">${productInfo.itemInBox}/ ${productInfo.weight}</div>
-
+            
             <!-- cart-item__details -->
             <div class="cart-item__details">
-              <div class="items items--small counter-wrapper">
-                <div class="items__control" data-action="minus">
-                  -
-                </div>
-                <div class="items__current" data-counter="">${productInfo.counter}</div>
-                <div class="items__control" data-action="plus">+</div>
+            <div class="items items--small counter-wrapper">
+            <div class="items__control" data-action="minus">
+            -
+            </div>
+            <div class="items__current" data-counter="">${productInfo.counter}</div>
+            <div class="items__control" data-action="plus">+</div>
               </div>
 
               <div class="price">
@@ -109,15 +120,23 @@ window.addEventListener('click', function (event) {
             </div>
             <!-- // cart-item__details -->
           </div>
-        </div>
-      </div>`
+          </div>
+          </div>`
 
-        //   add to carzine
+            //   add to carzine
 
-        cartWrapper.insertAdjacentHTML('beforeend', cardItemHTML)
+            cartWrapper.insertAdjacentHTML('beforeend', cardItemHTML)
+        }
 
+
+        // posle dobavleniya vozvreashshayem counter na 1
+
+        card.querySelector('[data-counter]').innerText = "1"
+        toggleComplite()
     }
 })
 
 
 // add product to carzine / end
+
+
