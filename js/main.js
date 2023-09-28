@@ -1,3 +1,28 @@
+function calcTotalPrice() {
+
+    const cartItems = document.querySelectorAll('.cart-item')
+    const totalPrice = document.querySelector('.total-price')
+
+    console.log(cartItems);
+
+    let total = 0;
+
+    cartItems.forEach((item) => {
+        const itemCount = item.querySelector('[data-counter]').innerHTML
+        const itemPrice = item.querySelector('.price__currency').innerHTML
+
+        const priceTotal = parseInt(itemCount) * parseInt(itemPrice)
+
+        total = total + priceTotal
+
+        console.log(priceTotal);
+    })
+    totalPrice.innerHTML = total
+
+    console.log(total);
+
+}
+
 // skrit blok karzina pusta
 
 function toggleComplite() {
@@ -23,9 +48,7 @@ function toggleComplite() {
         orderForm.classList.add('none')
     }
 
-
     // you must call function toggleComplite() in two funchtions minus btn and add to carzine
-
 }
 
 
@@ -42,6 +65,7 @@ window.addEventListener('click', function (event) {
 
         const counter = counterWrapper.querySelector('[data-counter]')
         counter.innerText = ++counter.innerText
+        calcTotalPrice()
     }
 
     if (event.target.dataset.action === "minus") {
@@ -59,6 +83,8 @@ window.addEventListener('click', function (event) {
             event.target.closest('.cart-item').remove()
             toggleComplite()
         }
+
+        calcTotalPrice()
     }
 })
 
@@ -133,6 +159,8 @@ window.addEventListener('click', function (event) {
 
         card.querySelector('[data-counter]').innerText = "1"
         toggleComplite()
+        calcTotalPrice()
+
     }
 })
 
